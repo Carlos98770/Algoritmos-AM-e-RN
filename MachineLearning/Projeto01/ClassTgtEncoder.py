@@ -30,7 +30,7 @@ class TgtEncoder():
         return folders
 
 
-    def __meanFunction(self,dataframe):
+    def __meanFunction(self,dataframe) -> dict:
         #Coluna 0 é as categorias e 1 e os target
         categorias = dataframe.iloc[:,0].unique()
         target = dataframe.iloc[:,1].to_numpy()
@@ -76,6 +76,48 @@ class TgtEncoder():
         return meansFolders
     
 
-    def encoder() -> pd.DataFrame:
-        pass
+    def encoder(self) -> pd.DataFrame:
+        meansFolders = self.__means()
+        dfEncoders = []
+        indRows1 = 0
+        indRows2 = 0
+        ctd = 0
+        for i in range(1,6):
+	
+            indRows2 = int(i*len(self.__df)/self.__particao())
+            folder = self.__df.iloc[indRows1:indRows2,:].copy()
+            for category in (folder.loc[indRows1:indRows2,"Feature"].unique()):
+
+                folder.loc[folder["Feature"] == category,"Feature"] = meansFolders[i - 1][category]
+                
+
+            ctd +=1
+            indRows1 = indRows2
+            dfEncoders.append(folder)
+ 
+
+
+        df_enco = pd.concat(dfEncoders,axis=0)
+        df_enco.rename(columns={'Feature': 'Feature_econding'}, inplace=True)
+        df_final = pd.concat([df_enco,self.__df.drop("Target",axis=1)],axis=1)
+
+        return df_final
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         
