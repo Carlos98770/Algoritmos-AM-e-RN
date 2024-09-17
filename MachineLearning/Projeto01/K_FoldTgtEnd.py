@@ -19,7 +19,7 @@ def main():
 if __name__ == "__main__":
 	main()
 
-
+###Testar a classe TgtEncoder para dados continuos e não classificatório
 #######################
 
 # Para os dados de teste, ou dados que serão inseridos após o treinamento, a categorização será feita pela média das categorias nas amostras de treinamento
