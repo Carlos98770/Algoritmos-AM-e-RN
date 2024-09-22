@@ -7,10 +7,16 @@ class TgtEncoder():
         self.__df = dataframe
         self.__X = self.__df[categorys]
         self.__y = self.__df[target]
+        self.__categorization = categorys
+        self.__target = target
 
 
     def __particao(self) -> int:
-        particoes = next(i for i in range(5,11) if len(self.__df) % i == 0)
+        try:
+            particoes = next(i for i in range(2,11) if len(self.__df) % i == 0)
+        except StopIteration:
+            particoes = 5
+
         return particoes
 
     def __folders(self) -> list:
@@ -22,11 +28,12 @@ class TgtEncoder():
 
         for i in range(self.__particao()):
             df_aux = pd.DataFrame()
-            df_aux["Feature"] = folders_X[i]
-            df_aux["Target"] = folders_y[i]
+            df_aux[self.__categorization] = folders_X[i]
+            df_aux[self.__target] = folders_y[i]
             
             folders.append(df_aux)
 
+        
         return folders
 
 
@@ -82,24 +89,29 @@ class TgtEncoder():
         indRows1 = 0
         indRows2 = 0
         ctd = 0
-        for i in range(1,6):
+        for i in range(1,len(meansFolders)):
 	
             indRows2 = int(i*len(self.__df)/self.__particao())
             folder = self.__df.iloc[indRows1:indRows2,:].copy()
-            for category in (folder.loc[indRows1:indRows2,"Feature"].unique()):
+            for category in (folder.loc[indRows1:indRows2,self.__categorization].unique()):
+                print(category)
+                try:
+                    folder.loc[folder[self.__categorization] == category,self.__categorization] = meansFolders[i - 1][category]
 
-                folder.loc[folder["Feature"] == category,"Feature"] = meansFolders[i - 1][category]
-                
+                except Exception:
+                    
+                    continue
 
+            
             ctd +=1
             indRows1 = indRows2
             dfEncoders.append(folder)
  
 
-
+        #print(meansFolders)
         df_enco = pd.concat(dfEncoders,axis=0)
-        df_enco.rename(columns={'Feature': 'Feature_econding'}, inplace=True)
-        df_final = pd.concat([df_enco,self.__df.drop("Target",axis=1)],axis=1)
+        df_enco.rename(columns={self.__categorization: self.__categorization + '_econding'}, inplace=True)
+        df_final = pd.concat([df_enco,self.__df.drop(self.__target,axis=1)],axis=1)
 
         return df_final
     

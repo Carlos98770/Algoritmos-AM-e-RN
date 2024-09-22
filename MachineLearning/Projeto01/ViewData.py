@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
+from ClassTgtEncoder import TgtEncoder
 
 
 
@@ -20,6 +21,7 @@ def treatPrices(dataframe):
             
 
     dataframe['Price'] = pricesNotFormat.astype(np.float32)
+    
 
 
 def valuesMissing():
@@ -30,28 +32,24 @@ def categorization():
     pass
 
 def main():
-    df = pd.read_csv("house_prices_aracaju_v2.csv")
+    df = pd.read_csv("teste.csv")
     treatPrices(df)
-
+    #print(df.head())
+    #print(df.columns.tolist())
+    
+    #print(len(df))
+    categorization = TgtEncoder(df,'Address','Price')
+    df_final = categorization.encoder()
+    print(df_final.head())
+    #print(df.head())
     X = df.iloc[:,0:len(df.columns)-1]
     y = df.loc[:,"Price"]
 
+    
+
     X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.32,random_state=32)
 
-    print(len(X_train))
-
-    particoes = next(i for i in range(4, 11) if len(X_train) % i == 0)
-
-    folders = np.array(())
-    
-    print(folders)
-    #for i in range(particoes):
         
-
-    #Address = df["Address"]
-    #AddressOneHot = pd.get_dummies(Address)
-    #print(AddressOneHot.head())
-    
 
 if __name__ == "__main__":
     main()

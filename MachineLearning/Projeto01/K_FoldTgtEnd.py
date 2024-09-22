@@ -5,14 +5,17 @@ from ClassTgtEncoder import TgtEncoder
 
 def main():
 	df = pd.DataFrame()
-	df["Feature"] = ['A','B','B','B','B','A','B','A','A','B','A','A','B','A','A','B','B','B','A','A']
+	df["Address"] = ["Rua Pina Ramos, 6 - Luzia, Aracaju - SE","Rua F, 176 - Aruana, Aracaju - SE","Rua B, 13 - Jabotiana, Aracaju - SE"]
 
-	df["Target"] = [1,0,0,1,1,1,0,0,0,0,1,0,1,0,1,0,0,0,1,1]
+	df["Area"] = [160,325,80]
+	df["Rooms"] = [3,3,3]
+	df["Bathrooms"] = [3,3,1]
+	df["Garage Cars"] = [1,3,1]
+	df["Price"] = [280000,360000,279000]
 
-	X = df["Feature"]
-	y = df["Target"]
+	#print(df)
 
-	categorization = TgtEncoder(df,"Feature","Target")
+	categorization = TgtEncoder(df,"Address","Price")
 	df_final = categorization.encoder()
 	print(df_final)
 
@@ -26,6 +29,7 @@ if __name__ == "__main__":
 
 
 
+ 
 
 
 
