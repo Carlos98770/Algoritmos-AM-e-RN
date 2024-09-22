@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from numpy import linalg as lg
+import time
 
 
 
@@ -30,14 +31,25 @@ class LinearRegression():
 
         return X_b.dot(self.__theta)
 
+#Como o dataset é pequeno, não iremos dividir em conjunto de treino e teste, para simplificar
 
-X = 2 * np.random.rand(100,1)
-y = 4 + 3 * X + np.random.rand(100,1)
+df = pd.read_csv("Salary_dataset.csv")
+
+X = df["YearsExperience"]
+y = df["Salary"]
+start_time = time.time()
 obj = LinearRegression()
 obj.fit(X,y)
+end_time = time.time()
+
+print(f"Tempo de execução do Mininos Quadrados: {end_time - start_time} s")
+
 fx = obj.plot(X)
+print(obj.getTheta())
 
 plt.scatter(X,y)
 plt.plot(X,fx,label="fit",color="red")
+plt.xlabel("Anos de experiência")
+plt.ylabel("Salário")
 plt.legend()
 plt.show()
