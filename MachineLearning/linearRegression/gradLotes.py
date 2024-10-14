@@ -21,6 +21,7 @@ class LinearRegression():
             
  
     def predict(self,data) -> np.float32:
+        data.insert(0,"Bias",np.ones((len(data),)))
         predict = data@self.__theta
         return predict
 
